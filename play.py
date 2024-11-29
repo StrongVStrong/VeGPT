@@ -1,7 +1,6 @@
 # play.py
 import vegito
 import itstheveggie
-import csv
 import datetime
 import os
 
@@ -41,6 +40,9 @@ def main():
         
         # Get response from gemini.py
         response_text = vegito.gemini_response(user_input)
+        
+        # Save logs
+        export_history_to_csv(user_input, response_text)
 
         # Print Vegito's response
         print(f"Vegito: {response_text}")
@@ -48,7 +50,6 @@ def main():
         # Call play.py to generate and play the speech
         itstheveggie.gen_audio(response_text)
         
-        export_history_to_csv(user_input, response_text)
 
 if __name__ == "__main__":
     main()
