@@ -3,35 +3,33 @@ import vegito
 import itstheveggie
 import csv
 import datetime
+import os
 
 def export_history_to_csv(user_input, response, filename="chat_history.csv"):
     """Append user input and response to the chat history CSV file."""
+    
+    # Get the current timestamp
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     # Create a dictionary for the new log entry
     log_entry = {
         "Timestamp": timestamp,
-        "User": user_input,
-        "Vegito": response
+        "User": user_input.strip(),  # Strip extra spaces/newlines
+        "Vegito": response.strip()   # Strip extra spaces/newlines
     }
     
-    # Check if the file already exists
-    file_exists = False
-    try:
-        with open(filename, mode='r', newline='', encoding='utf-8'):
-            file_exists = True
-    except FileNotFoundError:
-        pass  # File does not exist yet
-
+    # Check if the file exists using os.path.exists()
+    file_exists = os.path.exists(filename)
+    
     # Open the file and append the new log entry
     with open(filename, mode='a', newline='', encoding='utf-8') as file:
-        fieldnames = ["Timestamp", "User", "Vegito"]
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-        
+        # Write the header only if the file is new
         if not file_exists:
-            writer.writeheader()  # Write header only if the file is new
-        
-        writer.writerow(log_entry)  # Write the user input and response to the CSV
+            file.write('"Timestamp", "User", "Vegito"\n')
+        # Format the log entry with spaces after the commas
+        formatted_entry = f'"{log_entry["Timestamp"]}", "{log_entry["User"]}", "{log_entry["Vegito"]}"\n'
+        file.write(formatted_entry)
+        file.flush()
 
 def main():
     while True:
