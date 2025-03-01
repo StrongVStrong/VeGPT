@@ -53,8 +53,8 @@ def get_or_create_session():
 def generate_audio(response_text):
     itstheveggie.gen_audio(response_text)
 '''
-@app.route('/predict', methods=['POST'])
-def predict():
+@app.route('/chat', methods=['POST'])
+def chat():
     
     data = request.get_json()
 
